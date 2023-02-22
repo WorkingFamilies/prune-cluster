@@ -3,6 +3,29 @@
 
 PruneCluster is a fast and realtime marker clustering library.
 
+## Fork Note
+
+This is forked from [@sintef/prune-cluster](https://sintef-9012.github.io/PruneCluster) to implement proper ESM module `import` support for those not able to use WebPack `exports-loader`.
+
+### Usage
+
+`$ npm install @workingfamilies/prune-cluster`  
+
+```javascript
+import * as PruneCluster from '@workingfamilies/prune-cluster'
+
+const pruneCluster = new PruneCluster.ForLeaflet();
+
+...
+const marker = new PruneCluster.Marker(59.8717, 11.1909);
+pruneCluster.RegisterMarker(marker);
+...
+
+leafletMap.addLayer(pruneCluster);
+```
+
+### Features
+
 *Example 1:* [150 000 randomly moving markers](http://sintef-9012.github.io/PruneCluster/examples/random.150000.html).
 
 ![](https://sintef-9012.github.io/PruneCluster/twittermap.jpg)
@@ -12,10 +35,6 @@ It's working with [Leaflet](http://leafletjs.com/) as an alternative to [Leaflet
 
  
 *The library is designed for large datasets or live situations.* The memory consumption is kept low and the library is fast on mobile devices, thanks to a new algorithm inspired by collision detection in physical engines.
-
-
-
-### Features
 
 #### Realtime
 The clusters can be updated in realtime. It's perfect for live datasets or datasets you want to filter at runtime.
@@ -54,48 +73,10 @@ The size of a cluster can be adjusted on the fly *([Example](http://sintef-9012.
 The markers can be filtered easily with no performance cost.
 
 
-### Usage
-
-#### Classic Way
-```html
-	<!-- In <head> -->
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
-  integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
-  crossorigin=""/>
-
-	<!-- In <head> or before </body> -->
-	<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
-  integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
-  crossorigin=""></script>
-	<script src="PruneCluster/dist/PruneCluster.js"></script>
-```
-
-#### Webpack & NPM
-
-`npm install exports-loader prunecluster`
+### PruneCluster.ForLeaflet constructor
 
 ```javascript
-import { PruneCluster, PruneClusterForLeaflet } from 'exports-loader?PruneCluster,PruneClusterForLeaflet!prunecluster/dist/PruneCluster.js'
-
-```
-
-#### Example
-
-```javascript
-var pruneCluster = new PruneClusterForLeaflet();
-
-...
-var marker = new PruneCluster.Marker(59.8717, 11.1909);
-pruneCluster.RegisterMarker(marker);
-...
-
-leafletMap.addLayer(pruneCluster);
-```
-
-### PruneClusterForLeaflet constructor
-
-```javascript
-PruneClusterForLeaflet([size](#set-the-clustering-size), margin);
+PruneCluster.ForLeaflet([size](#set-the-clustering-size), margin);
 ```
 
 You can specify the size and margin which affect when your clusters and markers will be merged.
@@ -198,12 +179,12 @@ pruneCluster.PrepareLeafletMarker = function(leafletMarker, data) {
 #### Setting up a custom cluster icon
 ```javascript
 pruneCluster.BuildLeafletClusterIcon = function(cluster) {
-    var population = cluster.population, // the number of markers inside the cluster
+    const population = cluster.population, // the number of markers inside the cluster
         stats = cluster.stats; // if you have categories on your markers
 
     // If you want list of markers inside the cluster
     // (you must enable the option using PruneCluster.Cluster.ENABLE_MARKERS_LIST = true)
-    var markers = cluster.GetClusterMarkers() 
+    const markers = cluster.GetClusterMarkers() 
         
     ...
     
@@ -218,22 +199,22 @@ To listen to events on the cluster, you will need to override the ```BuildLeafle
 Below is an example of how to implement mouseover and mousedown for the cluster, but any events can be used in place of those.
 ```javascript
 pruneCluster.BuildLeafletCluster = function(cluster, position) {
-      var m = new L.Marker(position, {
+      const m = new L.Marker(position, {
         icon: pruneCluster.BuildLeafletClusterIcon(cluster)
       });
 
       m.on('click', function() {
         // Compute the  cluster bounds (it's slow : O(n))
-        var markersArea = pruneCluster.Cluster.FindMarkersInArea(cluster.bounds);
-        var b = pruneCluster.Cluster.ComputeBounds(markersArea);
+        const markersArea = pruneCluster.Cluster.FindMarkersInArea(cluster.bounds);
+        const b = pruneCluster.Cluster.ComputeBounds(markersArea);
 
         if (b) {
-          var bounds = new L.LatLngBounds(
+          const bounds = new L.LatLngBounds(
             new L.LatLng(b.minLat, b.maxLng),
             new L.LatLng(b.maxLat, b.minLng));
 
-          var zoomLevelBefore = pruneCluster._map.getZoom();
-          var zoomLevelAfter = pruneCluster._map.getBoundsZoom(bounds, false, new L.Point(20, 20, null));
+          const zoomLevelBefore = pruneCluster._map.getZoom();
+          const zoomLevelAfter = pruneCluster._map.getBoundsZoom(bounds, false, new L.Point(20, 20, null));
 
           // If the zoom level doesn't change
           if (zoomLevelAfter === zoomLevelBefore) {

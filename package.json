@@ -1,7 +1,7 @@
 {
-  "name": "@sintef/prune-cluster",
-  "version": "2.1.0",
-  "homepage": "https://github.com/SINTEF-9012/PruneCluster",
+  "name": "@workingfamilies/prune-cluster",
+  "version": "3.1.2",
+  "homepage": "https://github.com/workingfamilies/prune-cluster",
   "description": "Fast and realtime marker clustering for Leaflet",
   "keywords": [
     "map",
@@ -13,7 +13,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/SINTEF-9012/PruneCluster.git"
+    "url": "git+https://github.com/workingfamilies/prune-cluster.git"
   },
   "main": "./dist/PruneCluster.js",
   "devDependencies": {
@@ -27,5 +27,16 @@
     "spacejam": "^1.1.1",
     "time-grunt": "~1.4.0",
     "typescript": "^2.4.1"
-  }
+  },
+  "types": "./dist/PruneCluster.d.ts",
+  "bugs": {
+    "url": "https://github.com/workingfamilies/prune-cluster/issues"
+  },
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "@sintef-9012"
 }
